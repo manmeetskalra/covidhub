@@ -1,0 +1,11 @@
+<!-- template.html -->
+<!DOCTYPE html>
+<html>
+<body>
+    {{range .}}
+        <h3>Country</h3><span>{{.Country}}</span><br/><br/>
+        <h3>Cases</h3><span>{{.Cases}}</span><br/><br/>
+        <h3>Status</h3><span>{{.Status}}</span><br/><br/>
+        <h3>Date</h3><span>{{.Date}}</span><br/><br/>
+    {{end}}
+</body>

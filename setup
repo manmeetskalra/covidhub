@@ -1,0 +1,26 @@
+#!/bin/bash
+
+source ./vars
+
+echo "setting up mysql server on port 29291"
+docker-compose up -d mysql-1
+
+echo "Waiting for MySQL startup..."
+
+MYSQL="mysql --protocol=tcp -u root -P 29291"
+
+while !($MYSQL -e "SHOW DATABASES" > /dev/null 2>&1); do
+    echo -n .
+    sleep 1
+done
+
+$MYSQL < ./schema.sql
+
+echo "building docker image for email service"
+docker build -t email:v1 ./services/email -f ./services/email/Dockerfile
+
+echo "building docker image for auth service"
+docker build -t auth:v1 ./services/auth -f ./services/auth/Dockerfile 
+
+echo "building docker image for text service"
+docker build -t text:v1 ./services/text -f ./services/text/Dockerfile 

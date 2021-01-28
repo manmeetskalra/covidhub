@@ -1,0 +1,23 @@
+#!/bin/bash
+
+account_id=$1
+
+docker login -u AWS -p $(aws ecr get-login-password --region us-west-2) ${account_id}.dkr.ecr.us-west-2.amazonaws.com
+
+declare -a Services=("auth" "email" "text")
+
+for service in ${Services[@]}; do
+    echo "creating ecr repository for ${service}"
+    aws ecr create-repository --repository-name ${service} --region us-west-2
+
+    echo "building the docker-image for ${service}"
+    docker build -t ${service}:v1 ./services/${service} -f ./services/${service}/Dockerfile
+
+    echo "tagging the ${service}:v1 image"
+    docker tag ${service}:v1 ${account_id}.dkr.ecr.us-west-2.amazonaws.com/${service}:v1
+    
+    echo "push the ${service} to ecr"
+    docker push ${account_id}.dkr.ecr.us-west-2.amazonaws.com/${service}:v1
+done
+
+
