@@ -8,7 +8,7 @@ RUN npm install
 ENV MYSQL_HOST=covidhub.cluster-cscg2ncxunhq.us-west-2.rds.amazonaws.com
 ENV MYSQL_PORT=3306
 ENV MYSQL_USER=admin
-ENV MYSQL_PASSWORD=Shopify7224
+ENV MYSQL_PASSWORD=Manmeet
 
 COPY . .
 
